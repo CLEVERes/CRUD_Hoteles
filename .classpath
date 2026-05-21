@@ -7,6 +7,25 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="Driver/barcodes-7.2.1.jar"/>
+	<classpathentry kind="lib" path="Driver/commons-7.2.1.jar"/>
+	<classpathentry kind="lib" path="Driver/font-asian-7.2.1.jar"/>
+	<classpathentry kind="lib" path="Driver/forms-7.2.1.jar"/>
+	<classpathentry kind="lib" path="Driver/hyph-7.2.1.jar"/>
+	<classpathentry kind="lib" path="Driver/io-7.2.1.jar"/>
+	<classpathentry kind="lib" path="Driver/kernel-7.2.1.jar"/>
+	<classpathentry kind="lib" path="Driver/layout-7.2.1.jar"/>
+	<classpathentry kind="lib" path="Driver/pdfa-7.2.1.jar"/>
+	<classpathentry kind="lib" path="Driver/pdftest-7.2.1.jar"/>
+	<classpathentry kind="lib" path="Driver/sign-7.2.1.jar"/>
+	<classpathentry kind="lib" path="Driver/slf4j-api-1.7.25.jar"/>
+	<classpathentry kind="lib" path="Driver/slf4j-nop-1.7.25.jar"/>
+	<classpathentry kind="lib" path="Driver/styled-xml-parser-7.2.1.jar"/>
+	<classpathentry kind="lib" path="Driver/svg-7.2.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

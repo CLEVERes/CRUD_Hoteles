@@ -374,6 +374,11 @@ public class ControladorH extends WindowAdapter implements ActionListener, KeyLi
 				}
 				return;
 			}
+			
+			else if (e.getSource().equals(vch.btnExportar))
+			{
+				mh.exportarPDF(mh.tipoConsulta);
+			}
 		}
 	}
 

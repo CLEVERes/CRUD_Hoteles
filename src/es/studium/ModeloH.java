@@ -1,7 +1,10 @@
 package es.studium;
 
 import java.awt.Choice;
+import java.awt.Desktop;
 import java.awt.TextArea;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -11,6 +14,18 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+
+import com.itextpdf.io.font.constants.StandardFonts;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.UnitValue;
 
 public class ModeloH
 {
@@ -427,5 +442,157 @@ public class ModeloH
 		}
 
 		return fechaSQL;
+	}
+	
+	public void exportarPDF(int tipoConsulta)
+	{
+		String ruta = "Consulta.pdf";
+		try
+		{
+			connection = DriverManager.getConnection(url, user, password);
+			statement = connection.createStatement();
+			
+			
+			PdfWriter pdfW = new PdfWriter(ruta);
+			PdfDocument pdfD = new PdfDocument(pdfW);
+			Document document = new Document(pdfD, PageSize.A4.rotate());
+			
+			PdfFont bold = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
+			PdfFont font = PdfFontFactory.createFont(StandardFonts.HELVETICA);
+			Table table = null;
+			
+			if(tipoConsulta == 1)
+			{
+				sentenciaSQL = "select * from hoteles";
+				resultSet = statement.executeQuery(sentenciaSQL);
+				
+				table = new Table(UnitValue.createPercentArray(new float[] {2, 2, 2})).useAllAvailableWidth();
+				String[] cabecera = {"ID", "Nombre del Hotel", "Direccion del Hotel"};
+				for(String linea : cabecera)
+				{
+					table.addHeaderCell(new Cell().add(new Paragraph(linea).setFont(bold)));
+				}
+				
+				while(resultSet.next())
+				{
+					for(int i = 1; i <= 3; i++)
+					{
+						String valorCelda = resultSet.getString(i);
+						
+						if(valorCelda == null)
+						{
+							valorCelda = "";
+						}
+						
+						table.addCell(new Cell().add(new Paragraph(valorCelda).setFont(font)));
+					}
+				}
+			}
+			
+			else if(tipoConsulta == 2)
+			{
+				sentenciaSQL = "select idHabitacion, numeroHabitacion, concat(precioHabitacion, ' €') as 'pecioHabitacion', nombreHotel from habitaciones join hoteles on habitaciones.idHotelFK = hoteles.idHotel order by idHabitacion asc";
+				resultSet = statement.executeQuery(sentenciaSQL);
+				
+				table = new Table(UnitValue.createPercentArray(new float[] {2, 2, 2, 2})).useAllAvailableWidth();
+				String[] cabecera = {"ID", "Numero de Habitacion", "Precio de Habitacion", "Nombre del Hotel"};
+				for(String linea : cabecera)
+				{
+					table.addHeaderCell(new Cell().add(new Paragraph(linea).setFont(bold)));
+				}
+				
+				while(resultSet.next())
+				{
+					for(int i = 1; i <= 4; i++)
+					{
+						String valorCelda = resultSet.getString(i);
+						
+						if(valorCelda == null)
+						{
+							valorCelda = "";
+						}
+						
+						table.addCell(new Cell().add(new Paragraph(valorCelda).setFont(font)));
+					}
+				}
+				
+				
+			}
+			
+			else if(tipoConsulta == 3)
+			{
+				sentenciaSQL = "select * from huespedes";
+				resultSet = statement.executeQuery(sentenciaSQL);
+				
+				table = new Table(UnitValue.createPercentArray(new float[] {2, 2, 2})).useAllAvailableWidth();
+				String[] cabecera = {"ID", "Nombre del Huesped", "Telefono del huesped"};
+				for(String linea : cabecera)
+				{
+					table.addHeaderCell(new Cell().add(new Paragraph(linea).setFont(bold)));
+				}
+				
+				while(resultSet.next())
+				{
+					for(int i = 1; i <= 3; i++)
+					{
+						String valorCelda = resultSet.getString(i);
+						
+						if(valorCelda == null)
+						{
+							valorCelda = "";
+						}
+						
+						table.addCell(new Cell().add(new Paragraph(valorCelda).setFont(font)));
+					}
+				}
+			}
+			
+			else if(tipoConsulta == 4)
+			{
+				sentenciaSQL = "select idOcupar, date_format(fechaEntrada, '%d/%m/%Y') as 'fechaEntrada', date_format(fechaSalida, '%d/%m/%Y') as 'fechaSalida', numeroHabitacion, nombreHuesped from habitaciones join ocupar on  ocupar.idHabitacionFK = habitaciones.idHabitacion join huespedes on huespedes.idHuesped = ocupar.idHuespedFK order by idOcupar";
+				resultSet = statement.executeQuery(sentenciaSQL);
+				
+				table = new Table(UnitValue.createPercentArray(new float[] {2, 2, 2, 2, 2})).useAllAvailableWidth();
+				String[] cabecera = {"ID", "Fecha de entrada", "Fecha de salida", "Numero de la Habitacion", "Nombre del Huesped"};
+				for(String linea : cabecera)
+				{
+					table.addHeaderCell(new Cell().add(new Paragraph(linea).setFont(bold)));
+				}
+				
+				while(resultSet.next())
+				{
+					for(int i = 1; i <= 5; i++)
+					{
+						String valorCelda = resultSet.getString(i);
+						
+						if(valorCelda == null)
+						{
+							valorCelda = "";
+						}
+						
+						table.addCell(new Cell().add(new Paragraph(valorCelda).setFont(font)));
+					}
+				}
+			}
+			
+			document.setMargins(20, 20, 20, 20);
+			document.add(table);
+			document.close();
+			pdfD.close();
+			pdfW.close();
+			resultSet.close();
+			statement.close();
+			connection.close();
+			Desktop.getDesktop().open(new File(ruta));
+		}
+		catch(IOException ioe)
+		{
+			ioe.printStackTrace();
+		}
+		
+		catch(SQLException sqle)
+		{
+			sqle.printStackTrace();
+		}
 	}
 }
