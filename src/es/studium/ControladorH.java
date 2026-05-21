@@ -7,6 +7,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ControladorH extends WindowAdapter implements ActionListener, KeyListener
 {
@@ -17,6 +23,14 @@ public class ControladorH extends WindowAdapter implements ActionListener, KeyLi
 	private VistaModificacionH vmodh;
 	private VistaConsultaH vch;
 	private ModeloH mh;
+
+	private int ubicacion = 0;
+	private int accion = 0;
+
+	private String[] ubicacionLog =
+	{ "Hotel", "Habitacion", "Huesped", "Historial" };
+	private String[] accionLog =
+	{ "Alta realizada", "Baja realizada", "Modificacion realizada", "Consulta realizada" };
 
 	public ControladorH(ModeloH mh, VistaLoginH vlh)
 	{
@@ -34,6 +48,7 @@ public class ControladorH extends WindowAdapter implements ActionListener, KeyLi
 
 	public void actionPerformed(ActionEvent e)
 	{
+
 		if (vlh != null)
 		{
 			if (e.getSource().equals(vlh.btnLimpiar))
@@ -46,6 +61,8 @@ public class ControladorH extends WindowAdapter implements ActionListener, KeyLi
 			else if (e.getSource().equals(vlh.btnAceptar))
 			{
 				entrarLogin();
+				ubicacion = 5;
+				escribirLog(VistaMenuH.tipoUsuario, ubicacion, ubicacionLog, accion, accionLog);
 			}
 		}
 
@@ -53,6 +70,8 @@ public class ControladorH extends WindowAdapter implements ActionListener, KeyLi
 		{
 			if (e.getSource().equals(vmph.altaHotel))
 			{
+				accion = 1;
+				ubicacion = 1;
 				mh.tipoAlta = 1;
 				crearVistaAlta();
 				return;
@@ -60,18 +79,21 @@ public class ControladorH extends WindowAdapter implements ActionListener, KeyLi
 
 			else if (e.getSource().equals(vmph.altaHabitacion))
 			{
+				accion = 1;
+				ubicacion = 2;
 				mh.tipoAlta = 2;
 				crearVistaAlta();
 				this.vah.chcHoteles.addKeyListener(this);
 				mh.tipoChoice = 1;
 				Choice chcHoteles = vah.chcHoteles;
 				vah.chcHoteles = mh.rellenarChc(chcHoteles);
-				
 				return;
 			}
 
 			else if (e.getSource().equals(vmph.altaHuesped))
 			{
+				accion = 1;
+				ubicacion = 3;
 				mh.tipoAlta = 3;
 				crearVistaAlta();
 				return;
@@ -79,6 +101,8 @@ public class ControladorH extends WindowAdapter implements ActionListener, KeyLi
 
 			else if (e.getSource().equals(vmph.altaHistorial))
 			{
+				accion = 1;
+				ubicacion = 4;
 				mh.tipoAlta = 4;
 				crearVistaAlta();
 				mh.tipoChoice = 2;
@@ -90,30 +114,40 @@ public class ControladorH extends WindowAdapter implements ActionListener, KeyLi
 
 			else if (e.getSource().equals(vmph.bajaHotel))
 			{
+				accion = 2;
+				ubicacion = 1;
 				mh.tipoChoice = 1;
 				crearVistaBaja();
 			}
 
 			else if (e.getSource().equals(vmph.bajaHabitacion))
 			{
+				accion = 2;
+				ubicacion = 2;
 				mh.tipoChoice = 2;
 				crearVistaBaja();
 			}
 
 			else if (e.getSource().equals(vmph.bajaHuesped))
 			{
+				accion = 2;
+				ubicacion = 3;
 				mh.tipoChoice = 3;
 				crearVistaBaja();
 			}
-			
+
 			else if (e.getSource().equals(vmph.bajaHistorial))
 			{
+				accion = 2;
+				ubicacion = 4;
 				mh.tipoChoice = 4;
 				crearVistaBaja();
 			}
 
 			else if (e.getSource().equals(vmph.modificacionHotel))
 			{
+				accion = 3;
+				ubicacion = 1;
 				mh.tipoChoice = 1;
 				crearVistaModificacion();
 				return;
@@ -121,6 +155,8 @@ public class ControladorH extends WindowAdapter implements ActionListener, KeyLi
 
 			else if (e.getSource().equals(vmph.modificacionHabitacion))
 			{
+				accion = 3;
+				ubicacion = 2;
 				mh.tipoChoice = 2;
 				crearVistaModificacion();
 				mh.tipoChoice = 1;
@@ -132,13 +168,17 @@ public class ControladorH extends WindowAdapter implements ActionListener, KeyLi
 
 			else if (e.getSource().equals(vmph.modificacionHuesped))
 			{
+				accion = 3;
+				ubicacion = 3;
 				mh.tipoChoice = 3;
 				crearVistaModificacion();
 				return;
 			}
-			
+
 			else if (e.getSource().equals(vmph.modificacionHistorial))
 			{
+				accion = 3;
+				ubicacion = 4;
 				mh.tipoChoice = 4;
 				crearVistaModificacion();
 				mh.tipoChoice = 2;
@@ -153,28 +193,37 @@ public class ControladorH extends WindowAdapter implements ActionListener, KeyLi
 
 			else if (e.getSource().equals(vmph.consultaHotel))
 			{
+				accion = 4;
+				ubicacion = 1;
 				mh.tipoConsulta = 1;
 				crearVistaConsulta();
+				
 			}
 
 			else if (e.getSource().equals(vmph.consultaHabitacion))
 			{
+				accion = 4;
+				ubicacion = 2;
 				mh.tipoConsulta = 2;
 				crearVistaConsulta();
 			}
 
 			else if (e.getSource().equals(vmph.consultaHuesped))
 			{
+				accion = 4;
+				ubicacion = 3;
 				mh.tipoConsulta = 3;
 				crearVistaConsulta();
 			}
-			
+
 			else if (e.getSource().equals(vmph.consultaHistorial))
 			{
+				accion = 4;
+				ubicacion = 4;
 				mh.tipoConsulta = 4;
 				crearVistaConsulta();
 			}
-			
+
 		}
 
 		if (vah != null)
@@ -221,6 +270,7 @@ public class ControladorH extends WindowAdapter implements ActionListener, KeyLi
 					vbh.lblDlg.setText("Baja completada");
 					vbh.dlg.setVisible(true);
 					vbh.chcBajas = mh.rellenarChc(vbh.chcBajas);
+					escribirLog(VistaMenuH.tipoUsuario, ubicacion, ubicacionLog, accion, accionLog);
 				}
 
 				return;
@@ -237,18 +287,17 @@ public class ControladorH extends WindowAdapter implements ActionListener, KeyLi
 		{
 			if (e.getSource().equals(vmodh.btnEditar))
 			{
-				if(!vmodh.chcModificacion.getSelectedItem().split(" - ")[2].equals("Sin fecha de salida"))
+				if (!vmodh.chcModificacion.getSelectedItem().split(" - ")[2].equals("Sin fecha de salida"))
 				{
 					vmodh.txf1.setText(vmodh.chcModificacion.getSelectedItem().split(" - ")[1]);
 					vmodh.txf2.setText(vmodh.chcModificacion.getSelectedItem().split(" - ")[2]);
-					
-				}
-				else
+
+				} else
 				{
 					vmodh.txf1.setText(vmodh.chcModificacion.getSelectedItem().split(" - ")[1]);
 					vmodh.txf2.setText("");
 				}
-					vmodh.dlgEdicion.setVisible(true);
+				vmodh.dlgEdicion.setVisible(true);
 				return;
 			}
 
@@ -261,19 +310,19 @@ public class ControladorH extends WindowAdapter implements ActionListener, KeyLi
 
 			else if (e.getSource().equals(vmodh.btnAceptar))
 			{
-				if(mh.tipoChoice == 1)
+				if (mh.tipoChoice == 1)
 				{
 					mh.fk[0] = Integer.parseInt(vmodh.chcHoteles.getSelectedItem().split(" - ")[0]);
 				}
-				
-				else if(mh.tipoChoice == 4)
+
+				else if (mh.tipoChoice == 4)
 				{
 					mh.fecha[0] = mh.fechaSQL(vmodh.txf1.getText());
 					mh.fecha[1] = mh.fechaSQL(vmodh.txf2.getText());
 					mh.fk[0] = Integer.parseInt(vmodh.chcHabitaciones.getSelectedItem().split(" - ")[0]);
 					mh.fk[1] = Integer.parseInt(vmodh.chcHuespedes.getSelectedItem().split(" - ")[0]);
 				}
-				
+
 				aceptarModificacion();
 			}
 
@@ -294,6 +343,7 @@ public class ControladorH extends WindowAdapter implements ActionListener, KeyLi
 					vmodh.lblDlg.setText("Modificacion completada");
 					vmodh.dlg.setVisible(true);
 					vmodh.chcModificacion = mh.rellenarChc(vmodh.chcModificacion);
+					escribirLog(VistaMenuH.tipoUsuario, ubicacion, ubicacionLog, accion, accionLog);
 				}
 				return;
 			}
@@ -307,6 +357,8 @@ public class ControladorH extends WindowAdapter implements ActionListener, KeyLi
 
 		if (vch != null)
 		{
+			escribirLog(VistaMenuH.tipoUsuario, ubicacion, ubicacionLog, accion, accionLog);
+			
 			if (e.getSource().equals(vch.btnActualizar))
 			{
 				mh.realizarConsulta(vch.txa);
@@ -315,6 +367,10 @@ public class ControladorH extends WindowAdapter implements ActionListener, KeyLi
 					vch.lblDlg.setText("Se ha producido un error");
 					vch.dlg.setVisible(true);
 					mh.error = false;
+				}
+				else
+				{
+					escribirLog(VistaMenuH.tipoUsuario, ubicacion, ubicacionLog, accion, accionLog);
 				}
 				return;
 			}
@@ -325,6 +381,8 @@ public class ControladorH extends WindowAdapter implements ActionListener, KeyLi
 	{
 		if (vlh != null && e.getSource().equals(vlh.ventana))
 		{
+			ubicacion = 6;
+			escribirLog(VistaMenuH.tipoUsuario, ubicacion, ubicacionLog, accion, accionLog);
 			System.exit(0);
 		}
 
@@ -415,6 +473,7 @@ public class ControladorH extends WindowAdapter implements ActionListener, KeyLi
 			if (e.getSource() == vlh.txfUsuario || e.getSource() == vlh.txfClave)
 			{
 				entrarLogin();
+				escribirLog(VistaMenuH.tipoUsuario, ubicacion, ubicacionLog, accion, accionLog);
 			}
 
 			else if (vah != null
@@ -442,6 +501,7 @@ public class ControladorH extends WindowAdapter implements ActionListener, KeyLi
 				{
 					vah.lblDlg.setText("Alta correcta");
 					vah.dlg.setVisible(true);
+					escribirLog(VistaMenuH.tipoUsuario, ubicacion, ubicacionLog, accion, accionLog);
 				}
 				return;
 			}
@@ -546,6 +606,7 @@ public class ControladorH extends WindowAdapter implements ActionListener, KeyLi
 		{
 			vah.lblDlg.setText("Alta correcta");
 			vah.dlg.setVisible(true);
+			escribirLog(VistaMenuH.tipoUsuario, ubicacion, ubicacionLog, accion, accionLog);
 		}
 		return;
 	}
@@ -620,5 +681,67 @@ public class ControladorH extends WindowAdapter implements ActionListener, KeyLi
 			mh.error = false;
 		}
 		return;
+	}
+
+	public void escribirLog(int Usuario, int ubi, String[] ubiLog, int acc, String[] accLog)
+	{
+		SimpleDateFormat formateadorLog = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		String ahora = formateadorLog.format(new Date());
+		String usuario = "";
+		String informacion = "";
+
+		if (Usuario == 0)
+		{
+			usuario = "basico";
+		}
+
+		else if (Usuario == 1)
+		{
+			usuario = "admin";
+		}
+
+		if (ubi == 5)
+		{
+			informacion = "Inicio de sesion";
+		}
+
+		else if (ubi == 6)
+		{
+			informacion = "Fin de sesion";
+		}
+
+		else
+		{
+			for (int i = 0; i < accLog.length; i++)
+			{
+				for (int j = 0; j < ubiLog.length; j++)
+				{
+					if (acc == (i+1) && ubi == (j+1))
+					{
+						informacion = accLog[i] + " en: " + ubiLog[j];
+					}
+				}
+
+			}
+
+		}
+
+		try
+		{
+			FileWriter fileW = new FileWriter("FicheroLog.txt", true);
+			BufferedWriter bufferedW = new BufferedWriter(fileW);
+			PrintWriter printW = new PrintWriter(bufferedW);
+
+			printW.println("[" + ahora + "]" + "[" + usuario + "]" + "[" + informacion + "]");
+
+			printW.close();
+			bufferedW.close();
+			fileW.close();
+		}
+
+		catch (IOException ioe)
+		{
+			ioe.printStackTrace();
+		}
 	}
 }
