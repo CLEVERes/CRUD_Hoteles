@@ -396,7 +396,7 @@ public class ModeloH
 
 				resultSet = statement.executeQuery(sentenciaSQL);
 
-				chc.add("Selecciona un Historial");
+				chc.add("Selecciona una Reserva");
 				while (resultSet.next())
 				{
 					if (resultSet.getString("fechaSalida") != null)

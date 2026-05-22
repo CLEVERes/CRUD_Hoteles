@@ -310,7 +310,7 @@ public class ControladorH extends WindowAdapter implements ActionListener, KeyLi
 
 			else if (e.getSource().equals(vmodh.btnAceptar))
 			{
-				if (mh.tipoChoice == 1)
+				if (mh.tipoChoice == 2)
 				{
 					mh.fk[0] = Integer.parseInt(vmodh.chcHoteles.getSelectedItem().split(" - ")[0]);
 				}
@@ -328,8 +328,9 @@ public class ControladorH extends WindowAdapter implements ActionListener, KeyLi
 
 			else if (e.getSource().equals(vmodh.btnSi))
 			{
-				mh.realizarModificacion(vmodh);
 				vmodh.dlgConfirmacion.dispose();
+				mh.realizarModificacion(vmodh);
+				
 
 				if (mh.error == true)
 				{
