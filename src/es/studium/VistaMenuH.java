@@ -21,7 +21,7 @@ public class VistaMenuH
 	Menu mnHotel = new Menu("Hoteles");
 	Menu mnHabitacion = new Menu("Habitaciones");
 	Menu mnHuesped = new Menu("Huéspedes");
-	Menu mnHistorial = new Menu("Historial");
+	Menu mnHistorial = new Menu("Reservas");
 
 	MenuItem altaHotel = new MenuItem("Altas");
 	MenuItem bajaHotel = new MenuItem("Bajas");
@@ -42,6 +42,9 @@ public class VistaMenuH
 	MenuItem bajaHistorial = new MenuItem("Bajas");
 	MenuItem modificacionHistorial = new MenuItem("Modificaciones");
 	MenuItem consultaHistorial = new MenuItem("Consultas");
+	
+	Menu mnAyuda = new Menu("Ayuda");
+	MenuItem web = new MenuItem("Guía de usuario");
 
 	public VistaMenuH()
 	{
@@ -59,6 +62,8 @@ public class VistaMenuH
 		mnHabitacion.add(altaHabitacion);
 		mnHuesped.add(altaHuesped);
 		mnHistorial.add(altaHistorial);
+		
+		mnAyuda.add(web);
 
 		if (tipoUsuario == 1)
 		{
@@ -83,6 +88,7 @@ public class VistaMenuH
 		barraMenu.add(mnHabitacion);
 		barraMenu.add(mnHuesped);
 		barraMenu.add(mnHistorial);
+		barraMenu.add(mnAyuda);
 
 		ventana.setSize(400, 250);
 		ventana.setResizable(false);
