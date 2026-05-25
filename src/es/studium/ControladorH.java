@@ -223,7 +223,19 @@ public class ControladorH extends WindowAdapter implements ActionListener, KeyLi
 				mh.tipoConsulta = 4;
 				crearVistaConsulta();
 			}
-
+			
+			else if (e.getSource().equals(vmph.ayuda))
+			{
+				try
+				{
+					ProcessBuilder pb = new ProcessBuilder("hh.exe", "ayuda.chm");
+					pb.start();
+				} 
+				catch (IOException ioe)
+				{
+					ioe.printStackTrace();
+				}
+			}
 		}
 
 		if (vah != null)
@@ -568,6 +580,8 @@ public class ControladorH extends WindowAdapter implements ActionListener, KeyLi
 			this.vmph.consultaHabitacion.addActionListener(this);
 			this.vmph.consultaHuesped.addActionListener(this);
 			this.vmph.consultaHistorial.addActionListener(this);
+			
+			this.vmph.ayuda.addActionListener(this);
 		}
 		return;
 	}
